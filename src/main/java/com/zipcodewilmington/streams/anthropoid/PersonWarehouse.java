@@ -4,10 +4,8 @@ import com.zipcodewilmington.streams.tools.ReflectionUtils;
 import com.zipcodewilmington.streams.tools.logging.LoggerHandler;
 import com.zipcodewilmington.streams.tools.logging.LoggerWarehouse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,15 +34,27 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of names of Person objects
      */ // TODO
     public List<String> getNames() {
-        return null;
-    }
 
+        List<String> names= new ArrayList<>();
+        String name;
+
+        for(int i=0; i <people.size(); i++){
+            name= people.get(i).getName();
+            names.add(name);
+
+        }return names;
+    }
 
     /**
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
-        return null;
+
+        Set<String> set= new HashSet<>(people.size());
+
+        List<Person> persons= people.stream().filter(person -> set.add(person.getName())).collect(Collectors.toList());
+
+            return persons.stream();
     }
 
 
@@ -53,7 +63,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
-        return null;
+
+        Stream<Person> start= people.stream().filter(person -> person.getName().startsWith(character.toString()));
+
+        return start;
     }
 
     /**
@@ -61,14 +74,25 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
-        return null;
+
+        return getUniquelyNamedPeople().limit(n).collect(Collectors.toList()).stream();
     }
 
     /**
      * @return a mapping of Person Id to the respective Person name
      */ // TODO
     public Map<Long, String> getIdToNameMap() {
-        return null;
+
+        Map<Long, String> ids = new HashMap<>();
+        Long id;
+        String name;
+        for(Person person: people){
+            id= person.getPersonalId();
+            name= person.getName();
+            ids.put(id, name);
+        }
+
+        return ids;
     }
 
 
